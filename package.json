@@ -90,5 +90,8 @@
     "react": {
       "optional": true
     }
+  },
+  "resolutions": {
+    "react": "*"
   }
 }
