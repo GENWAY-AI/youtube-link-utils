@@ -1,0 +1,75 @@
+{
+  "name": "@genway-ai/youtube-link-utils",
+  "version": "0.1.0",
+  "description": "Tiny browser-first utilities to extract and validate YouTube video links.",
+  "keywords": [
+    "youtube",
+    "url",
+    "validation",
+    "video",
+    "browser",
+    "sdk"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/GENWAY-AI/youtube-link-utils",
+  "bugs": {
+    "url": "https://github.com/GENWAY-AI/youtube-link-utils/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GENWAY-AI/youtube-link-utils.git"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "browser": "dist/index.browser.js",
+  "unpkg": "dist/index.browser.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "quality": "npm run lint && npm run format:check",
+    "quality:fix": "npm run lint:fix && npm run format",
+    "release": "echo 'Use GitHub Release or semantic-release if you adopt it.'"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@types/node": "^20.0.0",
+    "axios": "^1.11.0",
+    "eslint": "^9.35.0",
+    "prettier": "^3.3.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.43.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "axios": "^1.0.0"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <title>YouTube Link Utils Example</title>
+  </head>
+  <body>
+    <h1>YouTube Link Utils Browser Example</h1>
+
+    <input
+      type="text"
+      id="urlInput"
+      placeholder="Enter YouTube URL"
+      style="width: 400px"
+    />
+    <button onclick="validateUrl()">Validate URL</button>
+
+    <div id="result"></div>
+
+    <script src="./dist/index.browser.js"></script>
+    <script>
+      async function validateUrl() {
+        const url = document.getElementById('urlInput').value;
+        const result = document.getElementById('result');
+
+        try {
+          // Use the global YouTubeLinkUtils object
+          const isValid = YouTubeLinkUtils.isValidYouTubeUrl(url);
+          const videoId = YouTubeLinkUtils.extractYouTubeVideoId(url);
+
+          result.innerHTML = `
+                    <h3>Results:</h3>
+                    <p>Valid: ${isValid}</p>
+                    <p>Video ID: ${videoId || 'N/A'}</p>
+                `;
+
+          if (isValid && videoId) {
+            const embedUrl = YouTubeLinkUtils.convertYouTubeToEmbedUrl(url);
+            result.innerHTML += `<p>Embed URL: ${embedUrl}</p>`;
+
+            // Note: getYouTubeVideoInfo requires axios and works in Node.js environment
+            result.innerHTML += `<p><em>Video info fetching works in Node.js environment</em></p>`;
+          }
+        } catch (error) {
+          result.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        }
+      }
+    </script>
+  </body>
+</html>
