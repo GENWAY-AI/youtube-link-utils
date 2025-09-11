@@ -85,6 +85,59 @@ Fetches video information from YouTube's oEmbed API. **Requires axios**.
 
 Comprehensive validation with optional existence check.
 
+## React Hook
+
+### `useYouTubeValidationLoading()`
+
+A React hook for validating YouTube URLs with loading states.
+
+```javascript
+// Import the hook directly from the react subpath
+import { useYouTubeValidationLoading } from '@genway-ai/youtube-link-utils/react';
+
+function VideoForm() {
+  const { isValidating, validateWithLoading, clearValidation } =
+    useYouTubeValidationLoading();
+  const [url, setUrl] = useState('');
+  const [isValid, setIsValid] = useState(null);
+
+  const handleValidate = async () => {
+    const result = await validateWithLoading(url);
+    setIsValid(result);
+  };
+
+  const handleClear = () => {
+    clearValidation();
+    setUrl('');
+    setIsValid(null);
+  };
+
+  return (
+    <div>
+      <input
+        value={url}
+        onChange={e => setUrl(e.target.value)}
+        placeholder="Enter YouTube URL"
+        disabled={isValidating}
+      />
+      <button onClick={handleValidate} disabled={isValidating}>
+        {isValidating ? 'Validating...' : 'Validate'}
+      </button>
+      <button onClick={handleClear}>Clear</button>
+      {isValid !== null && (
+        <p>{isValid ? 'Valid YouTube URL!' : 'Invalid YouTube URL'}</p>
+      )}
+    </div>
+  );
+}
+```
+
+The hook returns:
+
+- `isValidating`: Boolean indicating if validation is in progress
+- `validateWithLoading`: Async function that validates a URL and returns a boolean
+- `clearValidation`: Function to clear the current validation state
+
 ## Peer Dependencies
 
 This package requires `axios` for network-related functions:
@@ -93,7 +146,13 @@ This package requires `axios` for network-related functions:
 npm install axios
 ```
 
-For browser-only usage (validation/parsing), axios is not required.
+For React hook usage, install React:
+
+```bash
+npm install react
+```
+
+For browser-only usage (validation/parsing), neither axios nor React are required.
 
 ## Supported URL Formats
 

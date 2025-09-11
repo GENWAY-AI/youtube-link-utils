@@ -1,7 +1,11 @@
-import { PATTERN_VIDEO_ID_GROUPS, YOUTUBE_URL_PATTERNS } from '../consts';
+import {
+  PATTERN_VIDEO_ID_GROUPS,
+  YOUTUBE_URL_PATTERNS,
+  YOUTUBE_URLS,
+} from '../consts';
 
 export const getYouTubeOEmbedUrl = (videoId: string): string => {
-  return `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+  return `${YOUTUBE_URLS.OEMBED}?url=${YOUTUBE_URLS.WATCH}?v=${videoId}&format=json`;
 };
 
 export const convertYouTubeToEmbedUrl = (youtubeUrl: string): string | null => {
@@ -16,12 +20,12 @@ export const convertYouTubeToEmbedUrl = (youtubeUrl: string): string | null => {
 
     params.delete('v');
 
-    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    const embedUrl = `${YOUTUBE_URLS.EMBED}/${videoId}`;
     const paramString = params.toString();
 
     return paramString ? `${embedUrl}?${paramString}` : embedUrl;
   } catch {
-    return `https://www.youtube.com/embed/${videoId}`;
+    return `${YOUTUBE_URLS.EMBED}/${videoId}`;
   }
 };
 
