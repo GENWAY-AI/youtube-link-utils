@@ -1,4 +1,4 @@
-import { YOUTUBE_URL_PATTERNS } from '../consts';
+import { PATTERN_VIDEO_ID_GROUPS, YOUTUBE_URL_PATTERNS } from '../consts';
 
 export const getYouTubeOEmbedUrl = (videoId: string): string => {
   return `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
@@ -9,7 +9,20 @@ export const convertYouTubeToEmbedUrl = (youtubeUrl: string): string | null => {
   if (!videoId) {
     return null;
   }
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&disablekb=1&modestbranding=1&rel=0`;
+
+  try {
+    const url = new URL(youtubeUrl.trim());
+    const params = new URLSearchParams(url.search);
+
+    params.delete('v');
+
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    const paramString = params.toString();
+
+    return paramString ? `${embedUrl}?${paramString}` : embedUrl;
+  } catch {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
 };
 
 export const extractYouTubeVideoId = (url: string): string | null => {
@@ -21,7 +34,8 @@ export const extractYouTubeVideoId = (url: string): string | null => {
       const match = cleanUrl.match(pattern);
 
       if (match) {
-        return match[2] || match[1] || null;
+        const videoIdGroupIndex = PATTERN_VIDEO_ID_GROUPS[index];
+        return match[videoIdGroupIndex] || null;
       }
     }
   }

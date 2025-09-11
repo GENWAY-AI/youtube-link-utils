@@ -50,7 +50,6 @@ export default [
       'node_modules/**/*',
       'coverage/**/*',
       '*.min.js',
-      'test-build.js',
       'example.html',
     ],
   },
