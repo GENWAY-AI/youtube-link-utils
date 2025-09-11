@@ -14,7 +14,7 @@ export const YOUTUBE_URL_PATTERNS = [
   /^https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
   /^https?:\/\/(www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
   /^https?:\/\/(www\.)?youtube\.com\/playlist\?list=([a-zA-Z0-9_-]+)(&.*)?$/,
-];
+] as const;
 
 // Mapping of pattern index to the capture group index that contains the video/playlist ID
 export const PATTERN_VIDEO_ID_GROUPS = [
