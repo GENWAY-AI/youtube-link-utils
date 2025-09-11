@@ -55,7 +55,7 @@
     "format:check": "prettier --check .",
     "quality": "npm run lint && npm run format:check",
     "quality:fix": "npm run lint:fix && npm run format",
-    "release": "echo 'Use GitHub Release or semantic-release if you adopt it.'"
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
