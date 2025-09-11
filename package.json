@@ -70,6 +70,6 @@
     "vitest": "^2.0.0"
   },
   "peerDependencies": {
-    "axios": "^1.0.0"
+    "axios": "^1.11.0"
   }
 }
