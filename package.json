@@ -73,7 +73,6 @@
     "@vitest/coverage-v8": "^2.1.9",
     "axios": "^1.11.0",
     "eslint": "^9.35.0",
-    "happy-dom": "^18.0.1",
     "jsdom": "^26.1.0",
     "prettier": "^3.3.0",
     "react": "^18.0.0",
