@@ -1,0 +1,88 @@
+name: Auto Tag on Version Change
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+
+jobs:
+  auto-tag:
+    name: Create Tag on Version Change
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Need previous commit to compare
+
+      - name: Get current version from package.json
+        id: current-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: v$VERSION"
+
+      - name: Get previous version from package.json
+        id: previous-version
+        run: |
+          git checkout HEAD~1 -- package.json || echo "No previous package.json"
+          if [ -f package.json ]; then
+            PREV_VERSION=$(node -p "require('./package.json').version")
+            echo "previous=v$PREV_VERSION" >> $GITHUB_OUTPUT
+            echo "Previous version: v$PREV_VERSION"
+          else
+            echo "previous=v0.0.0" >> $GITHUB_OUTPUT
+            echo "No previous version found"
+          fi
+          git checkout HEAD -- package.json
+
+      - name: Check if version changed
+        id: version-changed
+        run: |
+          if [ "${{ steps.current-version.outputs.version }}" != "${{ steps.previous-version.outputs.previous }}" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Version changed from ${{ steps.previous-version.outputs.previous }} to ${{ steps.current-version.outputs.version }}"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Version unchanged: ${{ steps.current-version.outputs.version }}"
+          fi
+
+      - name: Check if tag already exists
+        id: tag-exists
+        if: steps.version-changed.outputs.changed == 'true'
+        run: |
+          if git rev-parse "${{ steps.current-version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag ${{ steps.current-version.outputs.version }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag ${{ steps.current-version.outputs.version }} does not exist"
+          fi
+
+      - name: Create and push tag
+        if: steps.version-changed.outputs.changed == 'true' && steps.tag-exists.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.current-version.outputs.version }}" -m "Release ${{ steps.current-version.outputs.version }}"
+          git push origin "${{ steps.current-version.outputs.version }}"
+          echo "✅ Created and pushed tag: ${{ steps.current-version.outputs.version }}"
+
+      - name: Tag creation summary
+        run: |
+          echo "## Auto-Tag Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Current version:** ${{ steps.current-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous version:** ${{ steps.previous-version.outputs.previous }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version changed:** ${{ steps.version-changed.outputs.changed }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.version-changed.outputs.changed }}" == "true" ]; then
+            echo "- **Tag exists:** ${{ steps.tag-exists.outputs.exists }}" >> $GITHUB_STEP_SUMMARY
+            if [ "${{ steps.tag-exists.outputs.exists }}" == "false" ]; then
+              echo "- **Action:** ✅ Created tag ${{ steps.current-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+              echo "- **Next:** Release workflow will be triggered automatically" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- **Action:** ⏭️ Skipped (tag already exists)" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "- **Action:** ⏭️ Skipped (no version change)" >> $GITHUB_STEP_SUMMARY
+          fi
