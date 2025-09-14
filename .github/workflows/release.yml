@@ -2,7 +2,6 @@ name: Release & Publish
 
 on:
   push:
-    branches: [main]
     tags:
       - 'v*'
   workflow_dispatch:
@@ -35,8 +34,25 @@ jobs:
           npm run quality
           npm test
 
+      - name: Run security audit
+        run: |
+          npm audit --audit-level moderate
+          npx audit-ci --moderate
+
       - name: Build package
         run: npm run build
+
+      - name: Validate package structure
+        run: |
+          # Verify all expected files exist
+          test -f dist/index.js
+          test -f dist/index.cjs
+          test -f dist/index.d.ts
+          test -f dist/react/index.js
+          test -f dist/react/index.cjs
+          test -f dist/react/index.d.ts
+
+          npm pack --dry-run
 
       - name: Publish to NPM
         run: npm publish
@@ -45,6 +61,7 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -52,6 +69,15 @@ jobs:
           body: |
             🎉 New release of youtube-link-utils!
 
-            See [CHANGELOG.md](./CHANGELOG.md) for details.
+            **Version:** ${{ github.ref_name }}
+            **Published:** $(date -u)
+
+            ## 📋 Changes
+            See [CHANGELOG.md](https://github.com/GENWAY-AI/youtube-link-utils/blob/main/CHANGELOG.md) for details.
+
+            ## 📦 Installation
+            ```bash
+            npm install @genway-ai/youtube-link-utils@${{ github.ref_name }}
+            ```
           draft: false
           prerelease: false
