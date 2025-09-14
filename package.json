@@ -62,7 +62,9 @@
     "format:check": "prettier --check .",
     "quality": "npm run lint && npm run format:check",
     "quality:fix": "npm run lint:fix && npm run format",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "prepare": "husky install",
+    "precommit": "lint-staged"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
@@ -73,7 +75,9 @@
     "@vitest/coverage-v8": "^2.1.9",
     "axios": "^1.11.0",
     "eslint": "^9.35.0",
+    "husky": "^8.0.3",
     "jsdom": "^26.1.0",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.3.1",
@@ -93,5 +97,14 @@
   },
   "resolutions": {
     "react": "*"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }
