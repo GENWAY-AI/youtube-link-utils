@@ -12,14 +12,72 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            try {
-              // Check if the PR author is a member of GENWAY-AI organization
-              const { data: membership } = await github.rest.orgs.checkMembershipForUser({
-                org: 'GENWAY-AI',
-                username: context.payload.pull_request.user.login
-              });
-              
-              // Organization member - add internal label
+            console.log(`🔍 Checking membership for user: ${context.payload.pull_request.user.login}`);
+            console.log(`🏢 Organization: GENWAY-AI`);
+            console.log(`📋 PR Number: ${context.payload.pull_request.number}`);
+
+            let isInternal = false;
+            const username = context.payload.pull_request.user.login;
+
+            // Method 0: Check if user is the repository owner
+            if (username === context.repo.owner || username === 'tomhipsh') {
+              console.log(`✅ User is repository owner or known internal user: ${username}`);
+              isInternal = true;
+            } else {
+              try {
+                // Method 1: Check organization membership
+                const { data: membership } = await github.rest.orgs.checkMembershipForUser({
+                  org: 'GENWAY-AI',
+                  username: username
+                });
+                
+                console.log(`✅ Organization membership check successful:`, membership);
+                isInternal = true;
+                
+              } catch (orgError) {
+                console.log(`❌ Organization membership check failed:`, orgError.message);
+                console.log(`📊 Error status:`, orgError.status);
+                
+                try {
+                  // Method 2: Check if user is a repository collaborator
+                  const { data: collaborator } = await github.rest.repos.checkCollaborator({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    username: username
+                  });
+                  
+                  console.log(`✅ Collaborator check successful:`, collaborator);
+                  isInternal = true;
+                  
+                } catch (collabError) {
+                  console.log(`❌ Collaborator check also failed:`, collabError.message);
+                  console.log(`📊 Collaborator error status:`, collabError.status);
+                  
+                  try {
+                    // Method 3: Check repository permissions directly
+                    const { data: permission } = await github.rest.repos.getCollaboratorPermissionLevel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      username: username
+                    });
+                    
+                    console.log(`✅ Permission level check:`, permission);
+                    
+                    // If user has write, maintain, or admin access, they're internal
+                    if (['write', 'maintain', 'admin'].includes(permission.permission)) {
+                      isInternal = true;
+                      console.log(`✅ User has ${permission.permission} access - treating as internal`);
+                    }
+                    
+                  } catch (permError) {
+                    console.log(`❌ Permission check also failed:`, permError.message);
+                  }
+                }
+              }
+            }
+
+            if (isInternal) {
+              // Internal contributor - add internal label
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -27,10 +85,10 @@ jobs:
                 labels: ['internal-contributor']
               });
               
-              console.log(`✅ PR from organization member: ${context.payload.pull_request.user.login}`);
+              console.log(`✅ PR from internal contributor: ${context.payload.pull_request.user.login}`);
               
-            } catch (error) {
-              // Not an organization member (or membership is private) - add external label
+            } else {
+              // External contributor - add external label
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
