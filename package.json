@@ -1,6 +1,6 @@
 {
   "name": "@genway-ai/youtube-link-utils",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Tiny browser-first utilities to extract and validate YouTube video links.",
   "keywords": [
     "youtube",
