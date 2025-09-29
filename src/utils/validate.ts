@@ -10,12 +10,13 @@ export const isValidYouTubeUrl = (url: string): boolean => {
     return false;
   }
 
-  if (!isValidUrl(url.trim())) {
+  const cleanUrl = url.trim();
+
+  if (!isValidUrl(cleanUrl)) {
     return false;
   }
 
-  const cleanUrl = url.trim();
-  return YOUTUBE_URL_PATTERNS.some(pattern => pattern.test(cleanUrl));
+  return YOUTUBE_URL_PATTERNS.some(({ pattern }) => pattern.test(cleanUrl));
 };
 
 export const validateYouTubeVideoExists = async (

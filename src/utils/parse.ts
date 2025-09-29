@@ -1,8 +1,4 @@
-import {
-  PATTERN_VIDEO_ID_GROUPS,
-  YOUTUBE_URL_PATTERNS,
-  YOUTUBE_URLS,
-} from '../consts';
+import { YOUTUBE_URL_PATTERNS, YOUTUBE_URLS } from '../consts';
 
 export const getYouTubeOEmbedUrl = (videoId: string): string => {
   return `${YOUTUBE_URLS.OEMBED}?url=${YOUTUBE_URLS.WATCH}?v=${videoId}&format=json`;
@@ -32,15 +28,11 @@ export const convertYouTubeToEmbedUrl = (youtubeUrl: string): string | null => {
 export const extractYouTubeVideoId = (url: string): string | null => {
   const cleanUrl = url.trim();
 
-  for (let index = 0; index < YOUTUBE_URL_PATTERNS.length; index += 1) {
-    const pattern = YOUTUBE_URL_PATTERNS[index];
-    if (pattern) {
-      const match = cleanUrl.match(pattern);
+  for (const { pattern, videoIdGroup } of YOUTUBE_URL_PATTERNS) {
+    const match = cleanUrl.match(pattern);
 
-      if (match) {
-        const videoIdGroupIndex = PATTERN_VIDEO_ID_GROUPS[index];
-        return match[videoIdGroupIndex] || null;
-      }
+    if (match) {
+      return match[videoIdGroup] || null;
     }
   }
 

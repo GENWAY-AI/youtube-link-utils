@@ -8,18 +8,25 @@ export const YOUTUBE_URLS = {
   OEMBED: 'https://www.youtube.com/oembed',
 } as const;
 
-// YouTube URL patterns to match various YouTube URL formats
+// YouTube URL patterns combined with their corresponding video ID capture groups
 export const YOUTUBE_URL_PATTERNS = [
-  /^https?:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})(&.*)?$/,
-  /^https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
-  /^https?:\/\/(www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
-  /^https?:\/\/(www\.)?youtube\.com\/playlist\?list=([a-zA-Z0-9_-]+)(&.*)?$/,
-] as const;
-
-// Mapping of pattern index to the capture group index that contains the video/playlist ID
-export const PATTERN_VIDEO_ID_GROUPS = [
-  2, // youtube.com/watch - video ID is in group 2
-  1, // youtu.be - video ID is in group 1
-  2, // youtube.com/embed - video ID is in group 2
-  2, // youtube.com/playlist - playlist ID is in group 2
+  {
+    pattern:
+      /^https?:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})(&.*)?$/,
+    videoIdGroup: 2, // youtube.com/watch - video ID is in group 2
+  },
+  {
+    pattern: /^https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
+    videoIdGroup: 1, // youtu.be - video ID is in group 1
+  },
+  {
+    pattern:
+      /^https?:\/\/(www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
+    videoIdGroup: 2, // youtube.com/embed - video ID is in group 2
+  },
+  {
+    pattern:
+      /^https?:\/\/(www\.)?youtube\.com\/playlist\?list=([a-zA-Z0-9_-]+)(&.*)?$/,
+    videoIdGroup: 2, // youtube.com/playlist - playlist ID is in group 2
+  },
 ] as const;
