@@ -44,6 +44,16 @@
   "types": "dist/index.d.ts",
   "browser": "dist/index.browser.js",
   "unpkg": "dist/index.browser.js",
+  "typesVersions": {
+    "*": {
+      "react": [
+        "dist/react/index.d.ts"
+      ],
+      "*": [
+        "dist/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
