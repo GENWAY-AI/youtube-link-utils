@@ -5,6 +5,7 @@ export const YOUTUBE_URLS = {
   SHORT_BASE: 'https://youtu.be',
   WATCH: 'https://www.youtube.com/watch',
   EMBED: 'https://www.youtube.com/embed',
+  SHORTS: 'https://www.youtube.com/shorts',
   OEMBED: 'https://www.youtube.com/oembed',
 } as const;
 
@@ -23,6 +24,11 @@ export const YOUTUBE_URL_PATTERNS = [
     pattern:
       /^https?:\/\/(www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
     videoIdGroup: 2, // youtube.com/embed - video ID is in group 2
+  },
+  {
+    pattern:
+      /^https?:\/\/(www\.)?youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})(\?.*)?$/,
+    videoIdGroup: 2, // youtube.com/shorts - video ID is in group 2
   },
   {
     pattern:

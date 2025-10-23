@@ -23,12 +23,15 @@ describe('Validation Functions', () => {
       expect(isValidYouTubeUrl(TEST_URLS.VALID_SHORT_HTTP)).toBe(true);
       expect(isValidYouTubeUrl(TEST_URLS.VALID_EMBED)).toBe(true);
       expect(isValidYouTubeUrl(TEST_URLS.VALID_EMBED_HTTP)).toBe(true);
+      expect(isValidYouTubeUrl(TEST_URLS.VALID_SHORTS)).toBe(true);
+      expect(isValidYouTubeUrl(TEST_URLS.VALID_SHORTS_HTTP)).toBe(true);
     });
 
     it('should return true for YouTube URLs with parameters', () => {
       expect(isValidYouTubeUrl(TEST_URLS.VALID_WATCH_WITH_PARAMS)).toBe(true);
       expect(isValidYouTubeUrl(TEST_URLS.VALID_SHORT_WITH_PARAMS)).toBe(true);
       expect(isValidYouTubeUrl(TEST_URLS.VALID_EMBED_WITH_PARAMS)).toBe(true);
+      expect(isValidYouTubeUrl(TEST_URLS.VALID_SHORTS_WITH_PARAMS)).toBe(true);
     });
 
     it('should handle URLs with whitespace', () => {
@@ -41,6 +44,7 @@ describe('Validation Functions', () => {
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_NO_PROTOCOL)).toBe(false);
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_EMPTY_EMBED)).toBe(false);
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_EMPTY_SHORT)).toBe(false);
+      expect(isValidYouTubeUrl(TEST_URLS.INVALID_EMPTY_SHORTS)).toBe(false);
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_NON_YOUTUBE)).toBe(false);
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_VIMEO)).toBe(false);
       expect(isValidYouTubeUrl(TEST_URLS.INVALID_NOT_URL)).toBe(false);

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-10-23
+
+### Added
+
+- Support for YouTube Shorts URLs (`https://www.youtube.com/shorts/{videoId}`)
+- Added `SHORTS` constant to `YOUTUBE_URLS` object
+- Added YouTube Shorts URL pattern to validation and parsing functions
+- Comprehensive test coverage for YouTube Shorts functionality
+
 ## [1.1.0] - 2025-09-30
 
 ### Added
