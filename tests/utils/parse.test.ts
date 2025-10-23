@@ -42,12 +42,25 @@ describe('Parse Functions', () => {
       );
     });
 
+    it('should extract video ID from YouTube Shorts URLs', () => {
+      expect(extractYouTubeVideoId(TEST_URLS.VALID_SHORTS)).toBe(
+        TEST_VIDEO_IDS.RICK_ROLL
+      );
+      expect(extractYouTubeVideoId(TEST_URLS.VALID_SHORTS_HTTP)).toBe(
+        TEST_VIDEO_IDS.TEST_ID_1
+      );
+    });
+
     it('should extract video ID from URLs with extra parameters', () => {
       expect(extractYouTubeVideoId(TEST_URLS.VALID_WATCH_WITH_PARAMS)).toBe(
         TEST_VIDEO_IDS.TEST_ID_2
       );
 
       expect(extractYouTubeVideoId(TEST_URLS.VALID_SHORT_WITH_PARAMS)).toBe(
+        TEST_VIDEO_IDS.TEST_ID_2
+      );
+
+      expect(extractYouTubeVideoId(TEST_URLS.VALID_SHORTS_WITH_PARAMS)).toBe(
         TEST_VIDEO_IDS.TEST_ID_2
       );
     });

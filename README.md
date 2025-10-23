@@ -159,6 +159,7 @@ For browser-only usage (validation/parsing), neither axios nor React are require
 - `https://www.youtube.com/watch?v=VIDEO_ID`
 - `https://youtu.be/VIDEO_ID`
 - `https://www.youtube.com/embed/VIDEO_ID`
+- `https://www.youtube.com/shorts/VIDEO_ID`
 - `https://www.youtube.com/playlist?list=PLAYLIST_ID`
 
 ## TypeScript
